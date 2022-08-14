@@ -22,7 +22,7 @@ Function.prototype.myCall = function (context, ...args) {
 
 
 // 测试用例
-let value = 2
+var value = 2
 
 let obj = {
     value: 1
