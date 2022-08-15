@@ -88,3 +88,125 @@ Promise.myRace = (promises) => {
         })
     })
 }
+
+// 6. 实现 Promise (符合 Promise/A+ 规范)
+const PENDING = 'pending';
+const FULFILLED = 'fulfilled';
+const REJECTED = 'rejected';
+
+function promise(executor) {
+    let self = this;
+    self.status = PENDING;
+    self.onFulfilled = [];
+    self.onRejected = [];
+
+    function resolve(value) {
+        if (self.status === PENDING) {
+            self.status = FULFILLED;
+            self.value = value;
+            self.onFulfilled.forEach(fn => fn());
+        }
+    }
+
+    function reject(reason) {
+        if (self.reason === PENDING) {
+            self.status = REJECTED;
+            self.reason = reason;
+            self.onRejected.forEach(fn => fn());
+        }
+    }
+
+    try {
+        executor(resolve, reject)
+    } catch (err) {
+        reject(err)
+    }
+}
+
+Promise.prototype.then = function (onFulfilled, onRejected) {
+    onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : value => value;
+    onRejected = typeof onRejected === 'function' ? onRejected : reason => { throw reason };
+    let self = this;
+    let promise2 = new Promise((resolve, reject) => {
+        if (self.status === FULFILLED) {
+            try {
+                setTimeout(() => {
+                    let x = self.onFulfilled(self.value);
+                    resolvePromise(promise2, x, resolve, reject);
+                })
+            } catch (e) {
+                reject(e);
+            }
+        }
+        if (self.status === REJECTED) {
+            try {
+                setTimeout(() => {
+                    let x = self.onRejected(self.reason);
+                    resolvePromise(promise2, x, resolve, reject);
+                })
+            } catch (e) {
+                reject(e);
+            }
+        }
+        if (self.status === PENDING) {
+            try {
+                self.onFulfilled.push(() => {
+                    try {
+                        setTimeout(() => {
+                            let x = self.onFulfilled(self.value);
+                            resolvePromise(promise2, x, resolve, reject);
+                        })
+                    } catch (e) {
+                        reject(e);
+                    }
+                })
+                self.onRejected.push(() => {
+                    try {
+                        setTimeout(() => {
+                            let x = self.onRejected(self.reason);
+                            resolvePromise(promise2, x, resolve, reject);
+                        })
+                    } catch (e) {
+                        reject(e);
+                    }
+                })
+            } catch (e) {
+                reject(e);
+            }
+        }
+    })
+    return promise2;
+}
+
+function resolvePromise(promise2, x, resolve, reject) {
+    if (promise2 === x) {
+        reject(new Error('cycle'));
+    }
+    if (x && typeof x === 'object' || typeof x === 'function') {
+        let used;
+        try {
+            let then = x.then;
+            if (typeof then === 'function') {
+                then.call(x, y => {
+                    if (used) return;
+                    used = true;
+                    resolvePromise(promise2, y, resolve, reject)
+                }, r => {
+                    if (used) return;
+                    used = true;
+                    reject(r);
+                })
+            } else {
+                if (used) return;
+                used = true;
+                resolve(x)
+            }
+        } catch (e) {
+            if (used) return;
+            used = true;
+            reject(e);
+        }
+    } else {
+        resolve(x);
+    }
+}
