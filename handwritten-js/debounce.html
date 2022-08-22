@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="text" id="input" />
+    <script type="text/javascript">
+        const inputEl = document.getElementById("input");
+
+        const debounce = function (func, delay) {
+            let timer = null;
+            return function (...args) {
+                clearTimeout(timer);
+                timer = setTimeout(() => {
+                    // 改变 this 指向和传参
+                    func.apply(this, args);
+                }, delay)
+            }
+        }
+
+        const showValue = debounce(function (name) {
+            console.log(inputEl.value, this, name);
+        }, 1000);
+
+        inputEl.addEventListener('input', () => {
+            // 绑定 this 和 入参
+            showValue.call({ a: 1, b: 2 }, 'test');
+        });
+    </script>
+</body>
+
+</html>
