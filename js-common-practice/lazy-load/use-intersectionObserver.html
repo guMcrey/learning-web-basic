@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lazy load - intersection observer</title>
+    <style>
+        .img {
+            width: 220px;
+            height: 220px;
+            background-color: #ccc;
+            margin-bottom: 40px;
+            margin-left: 50px;
+        }
+
+        .pic {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="img">
+            <img class="pic"
+                data-src="https://img10.360buyimg.com/n7/jfs/t1/183679/11/2189/143829/6091f5d8E933e7ad1/e3e2001666f2ce7b.jpg" />
+        </div>
+        <div class="img">
+            <img class="pic"
+                data-src="https://img12.360buyimg.com/n7/jfs/t1/192682/11/617/163213/608b887aEddbbbee3/9570466a90d02f79.jpg" />
+        </div>
+        <div class="img">
+            <img class="pic"
+                data-src="https://img14.360buyimg.com/n7/jfs/t1/156161/35/18802/268242/60641d96Eca3dee7f/4a32070a19deb4f5.jpg" />
+        </div>
+        <div class="img">
+            <img class="pic"
+                data-src="https://img10.360buyimg.com/n7/jfs/t1/130179/12/9273/167054/5f5468edE9d4ecd9c/39f7520d9f76b695.jpg" />
+        </div>
+        <div class="img">
+            <img class="pic"
+                data-src="https://img14.360buyimg.com/n7/jfs/t1/100888/13/13132/105320/5e5533c6Ea8daa487/f95d7ba4da5581c5.jpg" />
+        </div>
+        <div class="img">
+            <img class="pic"
+                data-src="https://img10.360buyimg.com/n7/jfs/t1/173986/31/8862/291849/6098d6d0E26c55012/c2144f6e074556d2.jpg" />
+        </div>
+        <div class="img">
+            <img class="pic"
+                data-src="https://img10.360buyimg.com/n7/jfs/t1/110754/4/12605/101916/5ee43244E6fbf9433/c42fb5e3f9558a59.jpg" />
+        </div>
+        <div class="img">
+            <img class="pic"
+                data-src="https://img10.360buyimg.com/n7/jfs/t1/148370/31/1084/45848/5eedc2eeEfdc2cd46/f3c3a6f0bd7998be.jpg" />
+        </div>
+        <div class="img">
+            <img class="pic"
+                data-src="https://img10.360buyimg.com/n7/jfs/t1/165930/8/7273/171076/602fd5dfE65a52775/ee27074b7037c020.jpg" />
+        </div>
+        <div class="img">
+            <img class="pic"
+                data-src="https://img13.360buyimg.com/n7/jfs/t1/190093/28/117/193777/60867822Ea949fbec/6fe51b122d0fdc5a.jpg" />
+        </div>
+        <div class="img">
+            <img class="pic"
+                data-src="https://img14.360buyimg.com/n7/jfs/t1/119501/15/6768/115886/5eca6c36Eb3541dc9/2f4534173878a23c.jpg" />
+        </div>
+    </div>
+
+    <script>
+        const lazyLoad = function (params) {
+            const attr = "data-src";
+            const type = "src";
+
+            // 更新整个文档的懒加载节点
+            const update = function () {
+                const els = document.querySelectorAll(`[${attr}]`);
+                for (let i = 0; i < els.length; i++) {
+                    const el = els[i];
+                    // 使 IntersectionObserver 开始监听一个目标对象
+                    observer.observe(el);
+                }
+            }
+
+            // 加载图片
+            const loadImage = function (el) {
+                // 缓存当前`src`加载失败时候用
+                const cache = el.src;
+                el.src = el.getAttribute(attr);
+                el.onerror = function () {
+                    el.src = params.errorPath || cache;
+                }
+            }
+
+            // 加载单个节点
+            const loadElement = function (el) {
+                loadImage(el);
+                el.removeAttribute(attr);
+                // IntersectionObserver 停止监听特定目标元素
+                observer.unobserve(el);
+            }
+
+            // Intersection Observer API 会注册一个回调函数, 每当被监视的元素进入或者退出另外一个元素时, 或者两元素的
+            // 相交部分大小发生变化时, 该回调方法会被触发执行
+            const observer = new IntersectionObserver(function (entries) {
+                for (let i = 0; i < entries.length; i++) {
+                    const item = entries[i];
+                    // IntersectionObserverEntry.isIntersecting: 当目标元素与交集观察者的根元素相交时为真
+                    if (item.isIntersecting) {
+                        loadElement(item.target);
+                    }
+                }
+            })
+
+            update()
+
+            return {
+                update,
+                observer
+            }
+        }
+
+        lazyLoad()
+
+    </script>
+</body>
+
+</html>
