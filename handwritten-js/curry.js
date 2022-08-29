@@ -6,9 +6,8 @@
  * https://github.com/mqyqingfeng/Blog/issues/42
  * */
 
-const curry = function (fn, args) {
+const curry = function (fn, args = []) {
     const length = fn.length;
-    args = args || [];
     return function () {
         let _args = args.slice(0);
         for (let i = 0; i < arguments.length; i++) {
