@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设计一个函数, 传入两个 DOM 节点, 找出它们最近的父节点</title>
+</head>
+
+<body>
+    <div class="div1">
+        <div class="el1"></div>
+        <div class="el2"></div>
+    </div>
+    <div class="el3">
+        <div class="el4"></div>
+    </div>
+
+    <script>
+        const findCommonParent = (node1, node2) => {
+            if (node1.contains(node2)) {
+                return node1;
+            } else if (node2.contains(node1)) {
+                return node2;
+            } else {
+                return findCommonParent(node1.parentNode, node2);
+            }
+        }
+
+        // 同级
+        const el1 = document.querySelector('.el1');
+        const el2 = document.querySelector('.el2');
+        const el3 = document.querySelector('.el3');
+        const el4 = document.querySelector('.el4');
+        console.log(findCommonParent(el1, el2));   // div1
+        console.log(findCommonParent(el1, el3));   // body
+        console.log(findCommonParent(el1, el4));   // body
+    </script>
+</body>
+
+</html>
