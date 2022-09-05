@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+
+<body>
+    <!-- 原理: 一系列大小相等的图片平铺, 利用 css 只显示一张图片, 其余隐藏. 通过计算图片偏移量改变展示哪张图片. 利用定时器自动轮播, 并可通过手动切换图片 -->
+    <div class="container">
+        <div class="image-list" style="left: 0px">
+            <img src="https://img10.360buyimg.com/n7/jfs/t1/183679/11/2189/143829/6091f5d8E933e7ad1/e3e2001666f2ce7b.jpg"
+                alt="">
+            <img src="https://img12.360buyimg.com/n7/jfs/t1/192682/11/617/163213/608b887aEddbbbee3/9570466a90d02f79.jpg"
+                alt="">
+            <img src="https://img14.360buyimg.com/n7/jfs/t1/156161/35/18802/268242/60641d96Eca3dee7f/4a32070a19deb4f5.jpg"
+                alt="">
+            <img src="https://img10.360buyimg.com/n7/jfs/t1/130179/12/9273/167054/5f5468edE9d4ecd9c/39f7520d9f76b695.jpg"
+                alt="">
+        </div>
+        <div class="pagination">
+            <span index="1" class="on"></span>
+            <span index="2"></span>
+            <span index="3"></span>
+            <span index="4"></span>
+        </div>
+        <a class="arrow" id="prev">&lt;</a>
+        <a class="arrow" id="next">&gt;</a>
+    </div>
+    <script src="index.js"></script>
+</body>
+
+</html>
