@@ -30,7 +30,7 @@ const httpRequestHandler = (url, requestBody = {}) => {
             .then((value) => resolve(value))
             .catch((reason) => reject(reason))
             .finally(() => {
-                handleList = handleList.filter((_) => _.url !== url && JSON.stringify(_.requestBody) !== JSON.stringify(requestBody))
+                handleList = handleList.filter((_) => _.url !== url || JSON.stringify(_.requestBody) !== JSON.stringify(requestBody))
             })
     })
     handleList.push({ url, requestBody, handle });
@@ -50,5 +50,3 @@ httpRequestHandler('/url1', body).then((res) => {
         console.log(`done`, handleList)  // []
     }, 100)
 })
-
-

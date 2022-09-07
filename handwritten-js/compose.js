@@ -20,7 +20,7 @@ console.log(a(1));
 
 function compose(...fn) {
     if (!fn.length) return (value) => value;
-    if (fn.length === 0) return fn[0];
+    if (fn.length === 1) return fn[0];
 
     return fn.reduce((acc, cur) => {
         return (...args) => {

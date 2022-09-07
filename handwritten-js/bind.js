@@ -39,7 +39,7 @@ function bar(name, age) {
 }
 bar.prototype.friend = 'kevin';
 
-var bindFoo = bar.bind(foo, 'daisy');
+var bindFoo = bar.myBind(foo, 'daisy');
 bindFoo(); // 1 'daisy' 'undefined'
 
 var obj = new bindFoo('18');

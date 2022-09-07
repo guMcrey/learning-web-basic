@@ -20,6 +20,11 @@ Promise.myReject = (value) => {
 
 
 // 3. 实现 Promise.all()
+/**
+ * 将多个 Promise 实例包装成一个 Promise 实例, const p = Promise.all([p1, p2, p3])
+ * 1. 只有所有 promises 变成 fulfilled, p 的状态才会变为 fulfilled, 返回一个 promise 数组
+ * 2. 只要有一个 promise 变成 rejected, p 的状态就会变成 rejected, 返回第一个 rejected 的 promise 的值
+ */
 Promise.myAll = (promises) => {
     return new Promise((resolve, reject) => {
         let count = 0;
@@ -44,6 +49,10 @@ Promise.myAll = (promises) => {
 }
 
 // 4. 实现 Promise.allSettled()
+/**
+ * Promise.allSettled() 接收一个 promise 数组, 只有当数组中的 promise 状态都发生改变,
+ * 不管是 fulfilled 还是 rejected, 返回一个 promise 结果组成的数组
+ */
 Promise.myAllSettled = (promises) => {
     return new Promise((resolve, reject) => {
         let count = 0;
@@ -81,6 +90,7 @@ Promise.myAllSettled = (promises) => {
 }
 
 // 5. 实现 Promise.race()
+// 当 promise 数组中有一个率先改变状态, 最终状态就发生改变
 Promise.myRace = (promises) => {
     return new Promise((resolve, reject) => {
         promises.forEach((promise) => {
