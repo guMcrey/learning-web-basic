@@ -18,7 +18,7 @@ const myNew = function (func, ...args) {
     const obj = Object.create(func.prototype)
     let result = func.apply(obj, args)
 
-    if (typeof result === 'object' && result !== 'null' || typeof result === 'function') {
+    if (typeof result === 'object' && result !== null || typeof result === 'function') {
         return result
     } else {
         return obj
