@@ -10,24 +10,32 @@
 
 const obj = {
     name: 'hakuna',
-    obj: {
+    test: {
         a: 1,
         b: 2,
     }
 };
 
-const p = new Proxy(obj, {
+const handler = {
     get: (target, propKey, receiver) => {
-        console.log('get data', propKey);
-        return Reflect.get(target, propKey, receiver);
+        console.log('get', propKey);
+        if (typeof target[propKey] === 'object' && target[propKey] !== null) {
+            // 解决嵌套对象内属性的响应式
+            return new Proxy(target[propKey], handler)
+        } else {
+            return Reflect.get(target, propKey, receiver);
+        }
     },
     set: (target, propKey, newValue, receiver) => {
-        console.log('set prop', propKey, newValue);
+        console.log('set', propKey, newValue);
         return Reflect.set(target, propKey, newValue, receiver);
     }
-})
+}
 
-console.log('p.name', p.name)   // hakuna
-p.obj.c = 'c'
-console.log('p.obj.c', p.obj.c)  // c
+const p = new Proxy(obj, handler)
 
+
+console.log('p.name', p.name)   // get hakuna
+p.test.c = 'c'  // get set c c
+console.log('p.obj.c', p.test.c)  // get obj.c
+console.log('p', p)  // p { name: 'hakuna', test: { a: 1, b: 2, c: 'c' } }

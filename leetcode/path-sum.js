@@ -24,4 +24,4 @@ function hasPathSum(root, targetSum) {
     return flag;
 }
 
-console.log(findLeafNode([5, 4, 8, 11, null, 13, 4, 7, 2, null, null, null, 1], 22));   // true
+console.log(hasPathSum([5, 4, 8, 11, null, 13, 4, 7, 2, null, null, null, 1], 22));   // true
