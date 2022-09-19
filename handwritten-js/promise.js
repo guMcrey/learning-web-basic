@@ -18,6 +18,17 @@ Promise.myReject = (value) => {
     })
 }
 
+// 3. 实现 Promise.finally()
+Promise.myFinally = function (callback) {
+    return this.then((value) => {
+        callback();
+        return value;
+    }, reason => {
+        callback();
+        return reason;
+    })
+}
+
 
 // 3. 实现 Promise.all()
 /**
