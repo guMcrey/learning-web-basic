@@ -11,7 +11,7 @@ function merge(arr1, arr2) {
             cur = arr2[p2];
             p2++;
         } else if (p2 === arr2.length) {
-            cur = arr2[p1];
+            cur = arr1[p1];
             p1++;
         } else if (arr1[p1] < arr2[p2]) {
             cur = arr1[p1];
@@ -25,4 +25,4 @@ function merge(arr1, arr2) {
     return result
 }
 
-console.log(merge([1, 2, 3], [2, 4, 7]))
+console.log(merge([1, 2, 3], [2, 4, 7]))  // [1, 2, 2, 3, 4, 7]

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>省市区</title>
+    <style type="text/css">
+        .container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        select {
+            height: 32px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <label for="provincial">省份:
+            <select name="province" id="province">
+                <option value="">-请选择省份-</option>
+            </select>
+        </label>
+        <label for="provincial">城市:
+            <select name="city" id="city">
+                <option value="">-请选择城市-</option>
+            </select>
+        </label>
+        <label for="provincial">地区:
+            <select name="area" id="area">
+                <option value="">-请选择地区-</option>
+            </select>
+        </label>
+    </div>
+
+    <script type="text/javascript">
+        // 1. 初始数据
+        const provinces = [
+            {
+                id: 1,
+                text: '浙江',
+                children: [
+                    {
+                        id: 11,
+                        text: '杭州',
+                        children: [
+                            { id: 111, text: '西湖区' }
+                        ]
+                    },
+                    { id: 12, text: '温州' },
+                ],
+            },
+            {
+                id: 2,
+                text: '江苏',
+                children: [
+                    { text: '南京', id: 21 },
+                    { text: '无锡', id: 22 },
+                ],
+            },
+        ];
+
+        // 2.获取元素
+        const oProvince = document.getElementById('province');
+        const oCity = document.getElementById('city');
+        const oArea = document.getElementById('area');
+
+        let selectedProv = undefined;
+        let selectedCity = undefined;
+
+        for (province of provinces) {
+            oProvince.add(new Option(province.text, province.id));
+        }
+
+        oProvince.onchange = () => {
+            selectedProv = oProvince.value;
+            // 获取所选省份的城市和地区
+            oCity.innerHTML = `<option value="">-请选择城市-</option>`;
+            oArea.innerHTML = `<option value="">-请选择地区-</option>`;
+            for (const prov of provinces) {
+                if (prov.id === Number(selectedProv) && prov.children) {
+                    for (city of prov.children) {
+                        oCity.add(new Option(city.text, city.id))
+                    }
+                }
+            }
+        }
+
+        oCity.onchange = () => {
+            oArea.innerHTML = `<option value="">--请选择市区--</option>`
+            selectedCity = oCity.value;
+            for (const prov of provinces) {
+                if (prov.id === Number(selectedProv)) {
+                    for (const city of prov.children) {
+                        if (city.id === Number(selectedCity) && city.children) {
+                            for (const area of city.children) {
+                                oArea.add(new Option(area.text, area.id))
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
